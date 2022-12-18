@@ -15,7 +15,7 @@ export const AnimeCards = ({ animeData, animeInfo, setAnimeInfo, animeComponent 
                 <div className="animeInfo">
                   <h4>{anime.title}</h4>
                 </div>
-                <div className="overlay">
+                <div className="cardOverlay">
                   <h4>{anime.title}</h4>
                   <AddToList />
                 </div>
