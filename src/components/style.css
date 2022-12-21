@@ -13,15 +13,11 @@ body.active-modal {
 .modalOverlay {
   width: 100vw;
   height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   position: fixed;
 }
 
 .modalOverlay {
   background: rgba(49, 49, 49, 0.8);
-  z-index: 0;
 }
 
 .modal-content {
@@ -36,11 +32,15 @@ body.active-modal {
   max-width: 600px;
   min-width: 400px;
   max-height: 80vh;
-  z-index: 1;
+}
+
+.largeImg, .modalTitle {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .close-modal {
-  display: flex;
-  justify-content: end;
+  display: block;
   border-radius: 1rem;
 }

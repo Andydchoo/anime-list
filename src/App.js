@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { AnimeCards } from './components/AnimeCards';
 import { Info } from './components/Info';
 import { AddToList } from './components/AddToList';
+import { RemoveFromList } from './components/RemoveFromList';
 import './components/style.css';
 
 function App() {
@@ -9,8 +10,27 @@ function App() {
   const [data, setData] = useState();
   const [info, setInfo] = useState();
   const [modal, setModal] = useState(true);
+  const [list, setList] = useState([]);
 
-  const toggleModal = () => {
+  const addTo = (anime) => {
+    const index = list.findIndex((myanime) => {
+      return myanime.mal_id === anime.mal_id
+    })
+
+    if (index < 0) {
+      const listArray = [...list, anime]
+      setList(listArray);
+    }
+  }
+
+  const remove = (anime) => {
+    const array = list.filter((myanime) => {
+      return myanime.mal_id !== anime.mal_id
+    })
+    setList(array)
+  }
+
+  const toggleModal = (e) => {
     setInfo(!info);
   };
 
@@ -19,13 +39,23 @@ function App() {
     const resData = await res.json();
     console.log(resData)
     setData(resData.data);
-  }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      enter();
+    }
+  };
+
+  const enter = () => {
+    getData()
+  };
 
   useEffect(() => {
     getData()
-  }, [search]);
+  }, []);
 
-  if(info) {
+  if (info) {
     document.body.classList.add('active-modal')
   } else {
     document.body.classList.remove('active-modal')
@@ -37,7 +67,9 @@ function App() {
         type="search"
         placeholder="Naruto"
         onChange={(e) => setSearch(e.target.value)}
+        onKeyDown={handleKeyDown}
       />
+      <button onClick={enter}>Search</button>
       <div className='container'>
         <div className='animeInfo'>
           {/* Creating popup from scratch. Will render when the info gets updated, then closes when you click anywhere out of it */}
@@ -47,6 +79,7 @@ function App() {
         </div>
         <div className='animeRow'>
           <h2 className="animeTitle">
+            Anime:
           </h2>
           <div className='row'>
             <AnimeCards
@@ -54,6 +87,19 @@ function App() {
               setAnimeInfo={setInfo}
               animeComponent={AddToList}
               toggle={toggleModal}
+              handleList={(anime) => addTo(anime)}
+            />
+          </div>
+          <h2 className="animeTitle">
+            My List:
+          </h2>
+          <div className='row'>
+            <AnimeCards
+              animeData={list}
+              setAnimeInfo={setInfo}
+              animeComponent={RemoveFromList}
+              toggle={toggleModal}
+              handleList={(anime) => remove(anime)}
             />
           </div>
         </div>
